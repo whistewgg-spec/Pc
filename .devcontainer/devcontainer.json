@@ -27,6 +27,7 @@
     }
   },
   "postCreateCommand": "bash .devcontainer/setup.sh",
-  "postStartCommand": "WORKDIR=${GITHUB_WORKSPACE:-/workspaces/virtual-pc} && docker compose -f ${WORKDIR}/windows.yml up -d || true",
+  "postStartCommand": "bash .devcontainer/start.sh",
+  "postAttachCommand": "bash .devcontainer/start.sh",
   "remoteUser": "codespace"
 }
