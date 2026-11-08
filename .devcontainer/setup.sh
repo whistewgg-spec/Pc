@@ -20,20 +20,19 @@ echo '{"data-root":"/tmp/docker-data"}' | sudo tee /etc/docker/daemon.json > /de
 sudo service docker restart 2>/dev/null || true
 sleep 3
 
-echo "[+] Baixando imagem Windows..."
+WORKDIR="${GITHUB_WORKSPACE:-/workspaces/virtual-pc}"
+
+echo "[+] Baixando imagem Linux KDE..."
+docker pull lscr.io/linuxserver/webtop:ubuntu-kde
+
+echo "[+] Iniciando Linux KDE na porta 6080..."
+docker compose -f "${WORKDIR}/linux.yml" up -d 2>/dev/null || \
+docker compose -f linux.yml up -d 2>/dev/null || true
+
+echo "[+] Baixando imagem Windows em background..."
 docker pull dockurr/windows &
 
-echo "[+] Baixando imagem Linux..."
-docker pull lscr.io/linuxserver/webtop:ubuntu-kde &
-
-wait
-echo "[+] Imagens prontas."
-
-WORKDIR="${GITHUB_WORKSPACE:-/workspaces/virtual-pc}"
-echo "[+] Iniciando Windows..."
-docker compose -f "${WORKDIR}/windows.yml" up -d 2>/dev/null || \
-docker compose -f windows.yml up -d 2>/dev/null || true
-
 echo "================================================"
-echo " Pronto! Acessa a aba PORTS → porta 8006"
+echo " Linux KDE pronto na porta 6080!"
+echo " Windows estará disponivel em ~15-20 min na porta 8006"
 echo "================================================"
